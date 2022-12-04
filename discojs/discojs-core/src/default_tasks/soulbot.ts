@@ -8,21 +8,23 @@ export const soulbot: TaskProvider = {
         taskTitle: "Soulbot",
         summary: {
           preview:
-            "Test our platform by using a publicly available <b>tabular</b> dataset. <br><br> Download the passenger list from the Titanic shipwreck here: <a class='underline text-primary-dark dark:text-primary-light' href='https://github.com/epfml/disco/raw/develop/example_training_data/titanic_train.csv'>titanic_train.csv</a> (more info <a class='underline text-primary-dark dark:text-primary-light' href='https://www.kaggle.com/c/titanic'>here</a>). <br> This model predicts the type of person most likely to survive/die in the historic ship accident, based on their characteristics (sex, age, class etc.).",
-          overview:
-            "We all know the unfortunate story of the Titanic: this flamboyant new transatlantic boat that sunk in 1912 in the North Atlantic Ocean. Today, we revist this tragedy by trying to predict the survival odds of the passenger given some basic features.",
+            "Test our platform by using a publicly available <b>tabular</b> dataset. <br><br> Download the passenger list from the Titanic shipwreck here: <a class='underline text-primary-dark dark:text-primary-light' href='https://github.com/epfml/disco/raw/develop/example_training_data/titanic_train.csv'>titanic_train.csv</a> (more info <a class='underline text-primary-dark dark:text-primary-light' href='https://www.kaggle.com/c/titanic'>here</a>). <br> This model learns a sequence to sequence model based on authorized talks between therapists and patients",
+          overview: "Feed more chat materials to our soulbot",
         },
         model:
           "The current model does not normalize the given data and applies only a very simple pre-processing of the data.",
         tradeoffs:
           "We are using a small model for this task: 4 fully connected layers with few neurons. This allows fast training but can yield to reduced accuracy.",
         dataFormatInformation:
-          "This model takes as input a CSV file with 12 columns. The features are general information about the passenger (sex, age, name, etc.) and specific related Titanic data such as the ticket class bought by the passenger, its cabin number, etc.<br><br>pclass: A proxy for socio-economic status (SES)<br>1st = Upper<br>2nd = Middle<br>3rd = Lower<br><br>age: Age is fractional if less than 1. If the age is estimated, it is in the form of xx.5<br><br>sibsp: The dataset defines family relations in this way:<br>Sibling = brother, sister, stepbrother, stepsister<br>Spouse = husband, wife (mistresses and fiancés were ignored)<br><br>parch: The dataset defines family relations in this way:<br>Parent = mother, father<br>Child = daughter, son, stepdaughter, stepson<br>Some children travelled only with a nanny, therefore parch=0 for them.<br><br>The first line of the CSV contains the header:<br> PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Cabin, Embarked<br><br>Each susequent row contains the corresponding data.",
+          "This model takes as input a CSV file with 2 columns. The first is the tokenized input and the second is the tokenized output.",
         dataExampleText:
           "Below one can find an example of a datapoint taken as input by our model. In this datapoint, the person is young man named Owen Harris that unfortunnalty perished with the Titanic. He boarded the boat in South Hamptons and was a 3rd class passenger. On the testing & validation page, the data should not contain the label column (Survived).",
         dataExample: [
-          { columnName: "Input", columnData: "Hello" },
-          { columnName: "Output", columnData: "Bonjour" },
+          {
+            columnName: "Input",
+            columnData: "Hello, how are you feel right now?",
+          },
+          { columnName: "Output", columnData: "I am not feeling well." },
         ],
         headers: ["Input", "Output"],
       },
@@ -36,7 +38,7 @@ export const soulbot: TaskProvider = {
         // preprocessingFunctions: [data.TextPreprocessing.Tokenize],
         preprocessingFunctions: [],
         modelCompileData: {
-          optimizer: "rmsprop",
+          optimizer: "adam",
           loss: "meanSquaredError",
           metrics: ["meanSquaredError"],
         },
